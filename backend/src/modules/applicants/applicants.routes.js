@@ -1,0 +1,11 @@
+const router=require('express').Router();
+const validate=require('../../middleware/validate');
+const {requirePermission}=require('../../middleware/authorize');
+const v=require('./applicants.validation');
+const controller=require('./applicants.controller');
+const read=requirePermission('applicants:read'); const write=requirePermission('applicants:write');
+router.get('/',read,validate({query:v.listQuery}),controller.list);
+router.get('/:id',read,validate({params:v.idParams}),controller.get);
+router.patch('/:id/status',write,validate({params:v.idParams,body:v.statusBody}),controller.changeStatus);
+router.post('/:id/hire',write,validate({params:v.idParams,body:v.hireBody}),controller.hire);
+module.exports=router;
